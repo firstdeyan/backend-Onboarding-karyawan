@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "ba065f4b-f8d6-4fee-aeba-4b7a5163e90b": {
+      "ProjectGuid": "ba065f4b-f8d6-4fee-aeba-4b7a5163e90b",
+      "DisplayName": "lmsAPI",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
