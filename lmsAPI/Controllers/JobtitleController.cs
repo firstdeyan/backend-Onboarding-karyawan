@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("MyAllowSpecificOrigins")]
+ 
     public class JobtitleController : ControllerBase
     {
        
@@ -15,6 +19,7 @@ namespace lmsAPI.Controllers
             this.context = context;
         }
 
+      
         [HttpGet]
         public async Task<ActionResult<List<job_titles>>> Get()
         {
