@@ -7,7 +7,7 @@ namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [EnableCors("MyAllowSpecificOrigins")]
+    [EnableCors]
  
     public class JobtitleController : ControllerBase
     {
