@@ -51,7 +51,7 @@ namespace lmsAPI.Controllers
         }
 
 
-        [HttpPost("register-user"), Authorize(Roles = "admin")]
+        [HttpPost("register-user"), Authorize(Roles = "admin,superadmin")]
         public async Task<ActionResult<List<admin>>> AddUser(registerUser request)
         {
 
