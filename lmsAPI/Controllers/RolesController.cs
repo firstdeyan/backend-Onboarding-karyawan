@@ -30,7 +30,12 @@ namespace lmsAPI.Controllers
         {
             var role = await this.context.roles.FindAsync(id);
             if (role == null)
-                return BadRequest("Role not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Role tidak ditemukan"
+                });
             return Ok(role);
         }
 
@@ -39,11 +44,16 @@ namespace lmsAPI.Controllers
         {
            var dbrole = await this.context.roles.FindAsync(role.id);
             if (dbrole != null)
-                return BadRequest("id already exits");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Role tidak ditemukan"
+                });
             this.context.roles.Add(role);
             await this.context.SaveChangesAsync();
 
-            return Ok("Role added successfully");
+            return Ok(await this.context.roles.ToListAsync());
         }
 
         [HttpPut]
@@ -51,14 +61,19 @@ namespace lmsAPI.Controllers
         {
             var dbrole = await this.context.roles.FindAsync(request.id);
             if (dbrole == null)
-                return BadRequest("Role not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Role tidak ditemukan"
+                });
             dbrole.role_name = request.role_name;
             dbrole.role_description = request.role_description;
             dbrole.role_platform = request.role_platform;
 
             await this.context.SaveChangesAsync();
 
-            return Ok("Role edited successfully");
+            return Ok(await this.context.roles.ToListAsync());
         }
 
         [HttpDelete("{id}")]
@@ -66,12 +81,17 @@ namespace lmsAPI.Controllers
         {
             var dbrole = await this.context.roles.FindAsync(id);
             if (dbrole == null)
-                return BadRequest("Role not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Role tidak ditemukan"
+                });
 
             this.context.roles.Remove(dbrole);
             await this.context.SaveChangesAsync();
 
-            return Ok("Role deleted successfully");
+            return Ok(await this.context.roles.ToListAsync());
         }
 
     }
