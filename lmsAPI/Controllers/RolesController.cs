@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,7 +8,8 @@ namespace lmsAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin")]
-    
+    [EnableCors]
+
     public class RolesController : ControllerBase
     {
         private readonly DataContext context;
