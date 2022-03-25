@@ -45,7 +45,7 @@ namespace lmsAPI.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     jobtitle_name = table.Column<string>(type: "text", nullable: false),
-                    jobtitle_decription = table.Column<string>(type: "text", nullable: false)
+                    jobtitle_description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
