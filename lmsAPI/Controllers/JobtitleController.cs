@@ -8,7 +8,7 @@ namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "user")]
+    [Authorize(Roles = "admin,superadmin,user")]
     [EnableCors]
  
     public class JobtitleController : ControllerBase
@@ -33,7 +33,12 @@ namespace lmsAPI.Controllers
         {
             var job = await this.context.job_titles.FindAsync(id);
             if (job == null)
-                return BadRequest("Job not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Job title tidak ditemukan"
+                });
             return Ok(job);
         }
 
@@ -42,11 +47,16 @@ namespace lmsAPI.Controllers
         {
             var dbjob = await this.context.job_titles.FindAsync(job.id);
             if (dbjob != null)
-                return BadRequest("id already exists");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Job title tidak ditemukan"
+                });
             this.context.job_titles.Add(job);
             await this.context.SaveChangesAsync();
 
-            return Ok("Job added successfully");
+            return Ok(await this.context.job_titles.ToListAsync());
         }
 
         [HttpPut]
@@ -54,13 +64,18 @@ namespace lmsAPI.Controllers
         {
             var dbjob = await this.context.job_titles.FindAsync(request.id);
             if (dbjob == null)
-                return BadRequest("Job not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Job title tidak ditemukan"
+                });
             dbjob.jobtitle_name = request.jobtitle_name;
-            dbjob.jobtitle_decription = request.jobtitle_decription;
+            dbjob.jobtitle_description = request.jobtitle_description;
 
             await this.context.SaveChangesAsync();
 
-            return Ok("Job edited successfully");
+            return Ok(await this.context.job_titles.ToListAsync());
         }
 
         [HttpDelete("{id}")]
@@ -68,12 +83,17 @@ namespace lmsAPI.Controllers
         {
             var dbjob = await this.context.job_titles.FindAsync(id);
             if (dbjob == null)
-                return BadRequest("Job not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Job title tidak ditemukan"
+                });
 
             this.context.job_titles.Remove(dbjob);
             await this.context.SaveChangesAsync();
 
-            return Ok("Job deleted successfully");
+            return Ok(await this.context.job_titles.ToListAsync());
         }
 
     }
