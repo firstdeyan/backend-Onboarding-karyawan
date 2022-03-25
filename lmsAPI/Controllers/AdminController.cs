@@ -31,7 +31,12 @@ namespace lmsAPI.Controllers
         {
             var admin = await this.context.admin.FindAsync(email);
             if (admin == null)
-                return BadRequest("Admin not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Admin tidak ditemukan"
+                });
             return Ok(admin);
         }
 
@@ -41,13 +46,18 @@ namespace lmsAPI.Controllers
             var role = await this.context.roles.FindAsync(request.role_id);
             var dbadmin = await this.context.admin.FindAsync(request.email);
             if (dbadmin == null)
-                return BadRequest("Admin not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Admin tidak ditemukan"
+                });
             dbadmin.admin_name = request.admin_name;
             dbadmin.role_ = role;
 
             await this.context.SaveChangesAsync();
 
-            return Ok("Admin edited successfully");
+            return Ok(await this.context.admin.ToListAsync());
         }
 
         [HttpPut("edit-password")]
@@ -57,12 +67,22 @@ namespace lmsAPI.Controllers
 
             if (dbadmin == null)
             {
-                return BadRequest("Wrong Email");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
             }
 
             if (!VerifyPasswordHash(request.password, dbadmin.passwordHash, dbadmin.passwordSalt))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Password salah"
+                });
             }
 
             CreatePasswordHash(request.new_password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -71,7 +91,12 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok("Password edited successfully");
+            return Ok(new editPasswordSucces
+            {
+                Status = "Success",
+                Code = "200",
+                Message = "Password berhasil diubah"
+            });
         }
 
         [HttpDelete("{email}")]
@@ -79,12 +104,17 @@ namespace lmsAPI.Controllers
         {
             var dbadmin = await this.context.admin.FindAsync(email);
             if (dbadmin == null)
-                return BadRequest("Admin not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Admin tidak ditemukan"
+                });
 
             this.context.admin.Remove(dbadmin);
             await this.context.SaveChangesAsync();
 
-            return Ok("Admin deleted successfully");
+            return Ok(await this.context.admin.ToListAsync());
         }
         private void CreatePasswordHash(string new_password, out byte[] passwordHash, out byte[] passwordSalt)
         {
