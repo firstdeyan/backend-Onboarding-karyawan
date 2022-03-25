@@ -7,7 +7,7 @@ namespace lmsAPI
         [Key]
         public int id { get; set; }
         public string jobtitle_name { get; set; } = string.Empty;
-        public string jobtitle_decription { get; set;} = string.Empty;
+        public string jobtitle_description { get; set;} = string.Empty;
     }
 
 }
