@@ -47,7 +47,7 @@ namespace lmsAPI.Controllers
             this.context.admin.Add(admin);
             await this.context.SaveChangesAsync();
 
-            return Ok("Registration is successful");
+            return Ok(await this.context.admin.ToListAsync());
         }
 
 
@@ -75,7 +75,7 @@ namespace lmsAPI.Controllers
             this.context.user.Add(user);
             await this.context.SaveChangesAsync();
 
-            return Ok("Registration is successful");
+            return Ok(await this.context.user.ToListAsync());
         }
 
         [HttpPost("login-admin")]
@@ -85,19 +85,29 @@ namespace lmsAPI.Controllers
 
             if (dbadmin == null)
             {
-                return BadRequest("Wrong Email");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
             }
 
              if (!VerifyPasswordHash(request.password, dbadmin.passwordHash, dbadmin.passwordSalt))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Password salah"
+                });
             }
-            string expiresln = "31536000";
+            string expiresIn = "31536000";
             string token = CreateTokenAdmin(dbadmin);
             return Ok(new
             {
                 token = token,
-                expiresln = expiresln,
+                expiresIn = expiresIn,
                 email = request.email
             });
         }
@@ -109,19 +119,26 @@ namespace lmsAPI.Controllers
 
             if (dbadmin == null)
             {
-                return BadRequest("Wrong Email");
+                return BadRequest(new Response { Status = "error",
+                                                 ErrorCode = "400",
+                                                 ErrorMessage = "Email salah" } );
             }
 
             if (!VerifyPasswordHash(request.password, dbadmin.passwordHash, dbadmin.passwordSalt))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Password salah"
+                });
             }
-            string expiresln = "31536000";
+            string expiresIn = "31536000";
             string token = CreateTokenSuperAdmin(dbadmin);
             return Ok(new
             {
                 token = token,
-                expiresln = expiresln,
+                expiresIn = expiresIn,
                 email = request.email
             });
         }
@@ -133,18 +150,28 @@ namespace lmsAPI.Controllers
 
             if (dbuser == null)
             {
-                return BadRequest("Wrong Email");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
             }
 
             if (!VerifyPasswordHash(request.password, dbuser.passwordHash, dbuser.passwordSalt))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Password salah"
+                });
             }
             
-            string expiresln = "31536000";
+            string expiresIn = "31536000";
             string token =  CreateTokenUser(dbuser);
             return Ok( new { token = token,
-                             expiresln = expiresln,
+                             expiresIn = expiresIn,
                              email = request.email});
         }
 
