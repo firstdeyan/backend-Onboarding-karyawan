@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +18,7 @@ namespace lmsAPI.Controllers
         private readonly IConfiguration configuration;
         public static admin admin = new admin();
         public static user user = new user();
+        
 
 
 
@@ -26,7 +28,8 @@ namespace lmsAPI.Controllers
             this.configuration = configuration;
         }
 
-        [HttpPost("register-admin")]
+        [HttpPost("register-admin"), Authorize(Roles = "superadmin")]
+
         public async Task<ActionResult<List<admin>>> AddAdmin(registerAdmin request)
         {
             
@@ -47,7 +50,8 @@ namespace lmsAPI.Controllers
             return Ok("Registration is successful");
         }
 
-        [HttpPost("register-user")]
+
+        [HttpPost("register-user"), Authorize(Roles = "admin")]
         public async Task<ActionResult<List<admin>>> AddUser(registerUser request)
         {
 
@@ -88,9 +92,38 @@ namespace lmsAPI.Controllers
             {
                 return BadRequest("Wrong password.");
             }
-
+            string expiresln = "31536000";
             string token = CreateTokenAdmin(dbadmin);
-            return Ok(token);
+            return Ok(new
+            {
+                token = token,
+                expiresln = expiresln,
+                email = request.email
+            });
+        }
+
+        [HttpPost("login-super-admin")]
+        public async Task<ActionResult<string>> LoginSuperAdmin(login request)
+        {
+            var dbadmin = await this.context.admin.FindAsync(request.email);
+
+            if (dbadmin == null)
+            {
+                return BadRequest("Wrong Email");
+            }
+
+            if (!VerifyPasswordHash(request.password, dbadmin.passwordHash, dbadmin.passwordSalt))
+            {
+                return BadRequest("Wrong password.");
+            }
+            string expiresln = "31536000";
+            string token = CreateTokenSuperAdmin(dbadmin);
+            return Ok(new
+            {
+                token = token,
+                expiresln = expiresln,
+                email = request.email
+            });
         }
 
         [HttpPost("login-user")]
@@ -107,9 +140,12 @@ namespace lmsAPI.Controllers
             {
                 return BadRequest("Wrong password.");
             }
-
-            string token = CreateTokenUser(dbuser);
-            return Ok(token);
+            
+            string expiresln = "31536000";
+            string token =  CreateTokenUser(dbuser);
+            return Ok( new { token = token,
+                             expiresln = expiresln,
+                             email = request.email});
         }
 
         private string CreateTokenAdmin(admin admin)
@@ -118,6 +154,29 @@ namespace lmsAPI.Controllers
             {
                 new Claim(ClaimTypes.Email, admin.email),
                 new Claim(ClaimTypes.Role, "admin")
+            };
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+                this.configuration.GetSection("AppSettings:Token").Value));
+
+            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddDays(365),
+                signingCredentials: cred);
+
+            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+            return jwt;
+        }
+
+        private string CreateTokenSuperAdmin(admin admin)
+        {
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, admin.email),
+                new Claim(ClaimTypes.Role, "superadmin")
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
