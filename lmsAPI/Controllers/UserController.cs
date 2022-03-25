@@ -8,7 +8,7 @@ namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin,superadmin")]
+    [Authorize(Roles = "admin,superadmin,user")]
     [EnableCors]
     public class UserController : ControllerBase
     {
@@ -30,7 +30,12 @@ namespace lmsAPI.Controllers
         {
             var user = await this.context.user.FindAsync(email);
             if (user == null)
-                return BadRequest("User not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "user tidak ditemukan"
+                });
             return Ok(user);
         }
 
@@ -41,7 +46,12 @@ namespace lmsAPI.Controllers
             var job = await this.context.job_titles.FindAsync(request.jobtitle_id);
             var dbuser = await this.context.user.FindAsync(request.email);
             if (dbuser == null)
-                return BadRequest("User not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "user tidak ditemukan"
+                });
             dbuser.name = request.name;
             dbuser.role_ = role;
             dbuser.jobtitle_ = job;
@@ -51,7 +61,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok("User edited successfully");
+            return Ok(await this.context.user.ToListAsync());
         }
 
         [HttpPut("edit-password")]
@@ -61,12 +71,22 @@ namespace lmsAPI.Controllers
 
             if (dbuser == null)
             {
-                return BadRequest("Wrong Email");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
             }
 
             if (!VerifyPasswordHash(request.password, dbuser.passwordHash, dbuser.passwordSalt))
             {
-                return BadRequest("Wrong password.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Password salah"
+                });
             }
 
             CreatePasswordHash(request.new_password, out byte[] passwordHash, out byte[] passwordSalt);
@@ -75,7 +95,11 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok("Password edited successfully");
+            return Ok(new editPasswordSucces { 
+                Status = "Success",
+                Code = "200",
+                Message = "Password berhasil diubah"
+            });
         }
 
         [HttpDelete("{email}")]
@@ -83,12 +107,17 @@ namespace lmsAPI.Controllers
         {
             var dbuser = await this.context.user.FindAsync(email);
             if (dbuser == null)
-                return BadRequest("user not found.");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "user tidak ditemukan"
+                });
 
             this.context.user.Remove(dbuser);
             await this.context.SaveChangesAsync();
 
-            return Ok("User deleted successfully");
+            return Ok(await this.context.user.ToListAsync());
         }
 
         private void CreatePasswordHash(string new_password, out byte[] passwordHash, out byte[] passwordSalt)
