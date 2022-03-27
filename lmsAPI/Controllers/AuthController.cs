@@ -81,6 +81,15 @@ namespace lmsAPI.Controllers
         [HttpPost("login-admin")]
         public async Task<ActionResult<string>> LoginAdmin(login request)
         {
+            if (!request.email.Contains("@"))
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Format email salah"
+                });
+            }
             var dbadmin = await this.context.admin.FindAsync(request.email);
 
             if (dbadmin == null)
@@ -115,6 +124,15 @@ namespace lmsAPI.Controllers
         [HttpPost("login-super-admin")]
         public async Task<ActionResult<string>> LoginSuperAdmin(login request)
         {
+            if (!request.email.Contains("@"))
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Format email salah"
+                });
+            }
             var dbadmin = await this.context.admin.FindAsync(request.email);
 
             if (dbadmin == null)
@@ -146,6 +164,15 @@ namespace lmsAPI.Controllers
         [HttpPost("login-user")]
         public async Task<ActionResult<string>> LoginUser(login request)
         {
+            if (!request.email.Contains("@"))
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Format email salah"
+                });
+            }
             var dbuser = await this.context.user.FindAsync(request.email);
 
             if (dbuser == null)
