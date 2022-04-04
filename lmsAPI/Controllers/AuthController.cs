@@ -55,7 +55,7 @@ namespace lmsAPI.Controllers
             this.context.admin.Add(admin);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.admin.ToListAsync());
+            return Ok(await this.context.admin.Include(e => e.role_).ToListAsync());
         }
 
 
@@ -91,7 +91,7 @@ namespace lmsAPI.Controllers
             this.context.user.Add(user);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.user.ToListAsync());
+            return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         [HttpPost("login-admin")]
