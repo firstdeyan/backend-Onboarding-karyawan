@@ -32,7 +32,15 @@ namespace lmsAPI.Controllers
 
         public async Task<ActionResult<List<admin>>> AddAdmin(registerAdmin request)
         {
-            
+            if (!request.email.Contains("@"))
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Format email salah"
+                });
+            }
             CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
             var role = await this.context.roles.FindAsync(request.role_id);
             var dbadmin = await this.context.admin.FindAsync(request.email);
@@ -52,14 +60,22 @@ namespace lmsAPI.Controllers
 
 
         [HttpPost("register-user"), Authorize(Roles = "admin,superadmin")]
-        public async Task<ActionResult<List<admin>>> AddUser(registerUser request)
+        public async Task<ActionResult<List<user>>> AddUser(registerUser request)
         {
-
+            if (!request.email.Contains("@"))
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Format email salah"
+                });
+            }
             CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
             var role = await this.context.roles.FindAsync(request.role_id);
             var job = await this.context.job_titles.FindAsync(request.jobtitle_id);
-            var dbadmin = await this.context.admin.FindAsync(request.email);
-            if (dbadmin != null)
+            var dbuser = await this.context.user.FindAsync(request.email);
+            if (dbuser != null)
                 return BadRequest("email already exists");
             user.email = request.email;
             user.name = request.name;
