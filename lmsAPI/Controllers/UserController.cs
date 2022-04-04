@@ -22,13 +22,13 @@ namespace lmsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<user>>> Get()
         {
-            return Ok(await this.context.user.ToListAsync());
+            return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         [HttpGet("{email}")]
         public async Task<ActionResult<user>> Get(string email)
         {
-            var user = await this.context.user.FindAsync(email);
+            var user = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).FirstOrDefaultAsync(g=>g.email == email);
             if (user == null)
                 return BadRequest(new Response
                 {
@@ -61,7 +61,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.user.ToListAsync());
+            return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         [HttpPut("edit-password")]
@@ -117,7 +117,7 @@ namespace lmsAPI.Controllers
             this.context.user.Remove(dbuser);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.user.ToListAsync());
+            return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         private void CreatePasswordHash(string new_password, out byte[] passwordHash, out byte[] passwordSalt)
