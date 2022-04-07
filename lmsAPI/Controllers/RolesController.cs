@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace lmsAPI.Controllers
 {
@@ -25,7 +26,7 @@ namespace lmsAPI.Controllers
             return Ok(await this.context.roles.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        /* [HttpGet("{id}")]
         public async Task<ActionResult<roles>> Get(int id)
         {
             var role = await this.context.roles.FindAsync(id);
@@ -37,12 +38,12 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Role tidak ditemukan"
                 });
             return Ok(role);
-        }
+        } */
 
         [HttpPost]
         public async Task<ActionResult<List<roles>>> AddRole(roles role)
         {
-           var dbrole = await this.context.roles.FindAsync(role.id);
+            var dbrole = await this.context.roles.FindAsync(role.id);
             if (dbrole != null)
                 return BadRequest(new Response
                 {
@@ -74,6 +75,20 @@ namespace lmsAPI.Controllers
             await this.context.SaveChangesAsync();
 
             return Ok(await this.context.roles.ToListAsync());
+        }
+
+        [HttpGet("{role_platform}")]
+        public async Task<ActionResult<roles>> Get(string role_platform)
+        {
+            var platform = await this.context.roles.Where(p => p.role_platform == role_platform).ToListAsync();
+            if (platform == null)
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "role tidak ditemukan"
+                });
+            return Ok(platform);
         }
 
         [HttpDelete("{id}")]
