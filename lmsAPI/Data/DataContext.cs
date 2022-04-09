@@ -9,5 +9,6 @@ namespace lmsAPI.Data
         public DbSet<roles> roles { get; set; }
         public DbSet<admin> admin { get; set; }
         public DbSet<user> user { get; set; }
+        public DbSet<categories> categories { get; set; }
     }
 }
