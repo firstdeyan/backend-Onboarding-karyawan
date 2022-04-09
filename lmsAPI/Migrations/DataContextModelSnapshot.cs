@@ -37,7 +37,7 @@ namespace lmsAPI.Migrations
                     b.Property<byte[]>("passwordSalt")
                         .HasColumnType("bytea");
 
-                    b.Property<int?>("role_id")
+                    b.Property<int>("role_id")
                         .HasColumnType("integer");
 
                     b.HasKey("email");
@@ -45,6 +45,30 @@ namespace lmsAPI.Migrations
                     b.HasIndex("role_id");
 
                     b.ToTable("admin");
+                });
+
+            modelBuilder.Entity("lmsAPI.categories", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("category_description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("category_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("duration")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.ToTable("categories");
                 });
 
             modelBuilder.Entity("lmsAPI.job_titles", b =>
@@ -55,7 +79,7 @@ namespace lmsAPI.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<string>("jobtitle_decription")
+                    b.Property<string>("jobtitle_description")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -98,14 +122,15 @@ namespace lmsAPI.Migrations
                     b.Property<string>("email")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("birthdate")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("birthdate")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("gender")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("jobtitle_id")
+                    b.Property<int>("jobtitle_id")
                         .HasColumnType("integer");
 
                     b.Property<string>("name")
@@ -125,7 +150,7 @@ namespace lmsAPI.Migrations
                     b.Property<double>("progress")
                         .HasColumnType("double precision");
 
-                    b.Property<int?>("role_id")
+                    b.Property<int>("role_id")
                         .HasColumnType("integer");
 
                     b.HasKey("email");
@@ -141,7 +166,9 @@ namespace lmsAPI.Migrations
                 {
                     b.HasOne("lmsAPI.roles", "role_")
                         .WithMany()
-                        .HasForeignKey("role_id");
+                        .HasForeignKey("role_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("role_");
                 });
@@ -150,11 +177,15 @@ namespace lmsAPI.Migrations
                 {
                     b.HasOne("lmsAPI.job_titles", "jobtitle_")
                         .WithMany()
-                        .HasForeignKey("jobtitle_id");
+                        .HasForeignKey("jobtitle_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("lmsAPI.roles", "role_")
                         .WithMany()
-                        .HasForeignKey("role_id");
+                        .HasForeignKey("role_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("jobtitle_");
 

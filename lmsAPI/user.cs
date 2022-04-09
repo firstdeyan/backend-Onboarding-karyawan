@@ -15,7 +15,7 @@ namespace lmsAPI
         public roles role_ { get; set; }
         public job_titles jobtitle_ { get; set; }
         public string gender { get; set; } = string.Empty;
-        public DateTime birthdate { get; set; }
+        public string birthdate { get; set; } = string.Empty;
         public string phone_number { get; set; } = string.Empty;
         public double progress { get; set; }
     }
