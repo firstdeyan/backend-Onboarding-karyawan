@@ -20,7 +20,7 @@ namespace lmsAPI.Migrations
                     role_id = table.Column<int>(type: "integer", nullable: false),
                     jobtitle_id = table.Column<int>(type: "integer", nullable: false),
                     gender = table.Column<string>(type: "text", nullable: false),
-                    birthdate = table.Column<DateOnly>(type: "date", nullable: false),
+                    birthdate = table.Column<string>(type: "text", nullable: false),
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     progress = table.Column<double>(type: "double precision", nullable: false)
                 },
