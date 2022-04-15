@@ -35,7 +35,7 @@ namespace lmsAPI.Controllers
                 {
                     Status = "error",
                     ErrorCode = "400",
-                    ErrorMessage = "Activity Category title tidak ditemukan"
+                    ErrorMessage = "Activity Category tidak ditemukan"
                 });
             return Ok(category);
         }
