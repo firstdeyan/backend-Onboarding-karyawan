@@ -10,5 +10,7 @@ namespace lmsAPI.Data
         public DbSet<admin> admin { get; set; }
         public DbSet<user> user { get; set; }
         public DbSet<categories> categories { get; set; }
+        public DbSet<activities> activities { get; set; }
+        public DbSet<activity_details> activity_details { get; set; }
     }
 }
