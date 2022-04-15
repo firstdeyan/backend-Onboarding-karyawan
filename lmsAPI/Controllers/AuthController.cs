@@ -76,7 +76,12 @@ namespace lmsAPI.Controllers
             var job = await this.context.job_titles.FindAsync(request.jobtitle_id);
             var dbuser = await this.context.user.FindAsync(request.email);
             if (dbuser != null)
-                return BadRequest("email already exists");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email telah digunakan"
+                });
             user.email = request.email;
             user.name = request.name;
             user.passwordHash = passwordHash;
