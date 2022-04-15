@@ -22,6 +22,69 @@ namespace lmsAPI.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("lmsAPI.activities", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<string>("activity_description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("activity_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("category_id")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("category_id");
+
+                    b.ToTable("activities");
+                });
+
+            modelBuilder.Entity("lmsAPI.activity_details", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int>("activity_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("detail_desc")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("detail_link")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("detail_name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("detail_type")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("detail_urutan")
+                        .HasColumnType("integer");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("activity_id");
+
+                    b.ToTable("activity_details");
+                });
+
             modelBuilder.Entity("lmsAPI.admin", b =>
                 {
                     b.Property<string>("email")
@@ -160,6 +223,28 @@ namespace lmsAPI.Migrations
                     b.HasIndex("role_id");
 
                     b.ToTable("user");
+                });
+
+            modelBuilder.Entity("lmsAPI.activities", b =>
+                {
+                    b.HasOne("lmsAPI.categories", "category_")
+                        .WithMany()
+                        .HasForeignKey("category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("category_");
+                });
+
+            modelBuilder.Entity("lmsAPI.activity_details", b =>
+                {
+                    b.HasOne("lmsAPI.activities", "activity_")
+                        .WithMany()
+                        .HasForeignKey("activity_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("activity_");
                 });
 
             modelBuilder.Entity("lmsAPI.admin", b =>
