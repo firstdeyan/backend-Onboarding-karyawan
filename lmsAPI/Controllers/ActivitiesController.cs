@@ -26,10 +26,25 @@ namespace lmsAPI.Controllers
             return Ok(await this.context.activities.Include(e => e.category_).ToListAsync());
         }
 
+        [HttpGet("{category_id}/{id}")]
+        public async Task<ActionResult<activities>> Get(int category_id, int id)
+        {
+            var activity = await this.context.activities.Where(p => p.category_id == category_id).Where(g => g.id == id).Include(e => e.category_).ToListAsync();
+            if (activity == null)
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Activity tidak ditemukan"
+                });
+
+            return Ok(activity);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<activities>> Get(int id)
         {
-            var activity = await this.context.activities.Include(e => e.category_).FirstOrDefaultAsync(g => g.id == id);
+            var activity = await this.context.activities.Include(f => f.category_).FirstOrDefaultAsync(g => g.id == id);
             if (activity == null)
                 return BadRequest(new Response
                 {
