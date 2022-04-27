@@ -23,13 +23,13 @@ namespace lmsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<admin>>> Get()
         {
-            return Ok(await this.context.admin.Include(e => e.role_).ToListAsync());
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         [HttpGet("{email}")]
         public async Task<ActionResult<admin>> Get(string email)
         {
-            var admin = await this.context.admin.Include(e => e.role_).FirstOrDefaultAsync(g => g.email == email);
+            var admin = await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).FirstOrDefaultAsync(g => g.email == email);
             if (admin == null)
                 return BadRequest(new Response
                 {
@@ -44,6 +44,7 @@ namespace lmsAPI.Controllers
         public async Task<ActionResult<List<admin>>> UpdateAdmin(editAdmin request)
         {
             var role = await this.context.roles.FindAsync(request.role_id);
+            var job = await this.context.job_titles.FindAsync(request.jobtitle_id);
             var dbadmin = await this.context.admin.FindAsync(request.email);
             if (dbadmin == null)
                 return BadRequest(new Response
@@ -54,10 +55,14 @@ namespace lmsAPI.Controllers
                 });
             dbadmin.admin_name = request.admin_name;
             dbadmin.role_ = role;
+            dbadmin.jobtitle_ = job;
+            dbadmin.gender = request.gender;
+            dbadmin.birthdate = request.birthdate;
+            dbadmin.phone_number = request.phone_number;
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.admin.Include(e => e.role_).ToListAsync());
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
         [HttpPut("edit-password")]
@@ -114,7 +119,7 @@ namespace lmsAPI.Controllers
             this.context.admin.Remove(dbadmin);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.admin.Include(e => e.role_).ToListAsync());
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
         private void CreatePasswordHash(string new_password, out byte[] passwordHash, out byte[] passwordSalt)
         {

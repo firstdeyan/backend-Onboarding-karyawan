@@ -43,19 +43,29 @@ namespace lmsAPI.Controllers
             }
             CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
             var role = await this.context.roles.FindAsync(request.role_id);
+            var job = await this.context.job_titles.FindAsync(request.jobtitle_id);
             var dbadmin = await this.context.admin.FindAsync(request.email);
             if (dbadmin != null)
-                return BadRequest("email already exists");
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email telah digunakan"
+                });
             admin.email = request.email;
             admin.admin_name = request.admin_name;
             admin.passwordHash = passwordHash;
             admin.passwordSalt = passwordSalt;
             admin.role_ = role;
+            admin.jobtitle_ = job;
+            admin.gender = request.gender;
+            admin.birthdate = request.birthdate;
+            admin.phone_number = request.phone_number;
 
             this.context.admin.Add(admin);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.admin.Include(e => e.role_).ToListAsync());
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
 
