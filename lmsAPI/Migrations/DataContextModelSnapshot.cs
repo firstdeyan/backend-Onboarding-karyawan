@@ -48,6 +48,53 @@ namespace lmsAPI.Migrations
                     b.ToTable("activities");
                 });
 
+            modelBuilder.Entity("lmsAPI.activities_owned", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+
+                    b.Property<int>("activities_id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("activity_note")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("end_date")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("mentor_email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("start_date")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("status")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("user_email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("validated")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("activities_id");
+
+                    b.HasIndex("user_email");
+
+                    b.ToTable("activities_owned");
+                });
+
             modelBuilder.Entity("lmsAPI.activity_details", b =>
                 {
                     b.Property<int>("id")
@@ -94,16 +141,33 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("birthdate")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("gender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("jobtitle_id")
+                        .HasColumnType("integer");
+
                     b.Property<byte[]>("passwordHash")
                         .HasColumnType("bytea");
 
                     b.Property<byte[]>("passwordSalt")
                         .HasColumnType("bytea");
 
+                    b.Property<string>("phone_number")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("role_id")
                         .HasColumnType("integer");
 
                     b.HasKey("email");
+
+                    b.HasIndex("jobtitle_id");
 
                     b.HasIndex("role_id");
 
@@ -236,6 +300,25 @@ namespace lmsAPI.Migrations
                     b.Navigation("category_");
                 });
 
+            modelBuilder.Entity("lmsAPI.activities_owned", b =>
+                {
+                    b.HasOne("lmsAPI.activities", "activities_")
+                        .WithMany()
+                        .HasForeignKey("activities_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("lmsAPI.user", "user_")
+                        .WithMany()
+                        .HasForeignKey("user_email")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("activities_");
+
+                    b.Navigation("user_");
+                });
+
             modelBuilder.Entity("lmsAPI.activity_details", b =>
                 {
                     b.HasOne("lmsAPI.activities", "activity_")
@@ -249,11 +332,19 @@ namespace lmsAPI.Migrations
 
             modelBuilder.Entity("lmsAPI.admin", b =>
                 {
+                    b.HasOne("lmsAPI.job_titles", "jobtitle_")
+                        .WithMany()
+                        .HasForeignKey("jobtitle_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("lmsAPI.roles", "role_")
                         .WithMany()
                         .HasForeignKey("role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("jobtitle_");
 
                     b.Navigation("role_");
                 });
