@@ -8,7 +8,7 @@ namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin,superadmin,user")]
+    [Authorize(Roles = "admin,superadmin,user,mentor")]
     [EnableCors]
  
     public class JobtitleController : ControllerBase
