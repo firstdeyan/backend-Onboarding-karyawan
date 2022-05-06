@@ -63,6 +63,9 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("category_id")
+                        .HasColumnType("integer");
+
                     b.Property<string>("end_date")
                         .IsRequired()
                         .HasColumnType("text");
@@ -89,6 +92,8 @@ namespace lmsAPI.Migrations
                     b.HasKey("id");
 
                     b.HasIndex("activities_id");
+
+                    b.HasIndex("category_id");
 
                     b.HasIndex("user_email");
 
@@ -308,6 +313,12 @@ namespace lmsAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("lmsAPI.categories", "category_")
+                        .WithMany()
+                        .HasForeignKey("category_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("lmsAPI.user", "user_")
                         .WithMany()
                         .HasForeignKey("user_email")
@@ -315,6 +326,8 @@ namespace lmsAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("activities_");
+
+                    b.Navigation("category_");
 
                     b.Navigation("user_");
                 });

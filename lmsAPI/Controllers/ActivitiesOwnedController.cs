@@ -22,13 +22,13 @@ namespace lmsAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<List<activities_owned>>> Get()
         {
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include( f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include( f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpGet("{user_email}")]
         public async Task<ActionResult<activities_owned>> GetAOByUserEmail(string user_email)
         {
-            var activities_owned = await this.context.activities_owned.Where(p => p.user_email == user_email).Include(e => e.user_).Include(f => f.activities_).ToListAsync();
+            var activities_owned = await this.context.activities_owned.Where(p => p.user_email == user_email).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
             if (activities_owned == null)
                 return BadRequest(new Response
                 {
@@ -43,7 +43,7 @@ namespace lmsAPI.Controllers
         [HttpGet("{user_email}/{status}")]
         public async Task<ActionResult<activities_owned>> GetAOByUserEmailByStatus(string user_email, string status)
         {
-            var activities_owned = await this.context.activities_owned.Where(p => p.user_email == user_email).Where(f => f.status == status).Include(e => e.user_).Include(f => f.activities_).ToListAsync();
+            var activities_owned = await this.context.activities_owned.Where(p => p.user_email == user_email).Where(f => f.status == status).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
             if (activities_owned == null)
                 return BadRequest(new Response
                 {
@@ -68,6 +68,7 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Email user tidak ada"
                 });
             var dbactivity = await this.context.activities.FindAsync(request.activity_id);
+            var dbcategory = await this.context.categories.FindAsync(request.category_id);
             /* var dbmentor = await this.context.user.Where(g => g.email == request.mentor_email).Where(p => p.role_id == 3).ToListAsync();
             if (dbmentor == null)
                 return BadRequest(new Response
@@ -79,6 +80,7 @@ namespace lmsAPI.Controllers
             activities_owned.id = request.id;
             activities_owned.user_ = dbuser;
             activities_owned.activities_ = dbactivity;
+            activities_owned.category_ = dbcategory;
             activities_owned.start_date = request.start_date;
             activities_owned.end_date = request.end_date;
             activities_owned.status = request.status;
@@ -88,7 +90,7 @@ namespace lmsAPI.Controllers
             this.context.activities_owned.Add(activities_owned);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpPut]
@@ -111,6 +113,7 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Email user tidak ada"
                 });
             var activity = await this.context.activities.FindAsync(request.activity_id);
+            var category = await this.context.categories.FindAsync(request.category_id);
             /* var dbmentor = await this.context.user.Where(g => g.email == request.mentor_email).Where(p => p.role_id == 3).ToListAsync();
             if (dbmentor == null)
                 return BadRequest(new Response
@@ -121,6 +124,7 @@ namespace lmsAPI.Controllers
                 }); */
             dbactivityowned.user_ = dbuser;
             dbactivityowned.activities_ = activity;
+            activities_owned.category_ = category;
             dbactivityowned.start_date = request.start_date;
             dbactivityowned.end_date = request.end_date;
             dbactivityowned.status = request.status;
@@ -130,7 +134,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpPut("status")]
@@ -157,7 +161,7 @@ namespace lmsAPI.Controllers
            
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpPut("duedate")]
@@ -185,7 +189,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpPut("mentor-email")]
@@ -212,7 +216,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpPut("activity-note")]
@@ -239,11 +243,11 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<activities>> Delete(int id)
+        public async Task<ActionResult<activities_owned>> Delete(int id)
         {
             var dbactivityowned = await this.context.activities_owned.FindAsync(id);
             if (dbactivityowned == null)
@@ -257,7 +261,7 @@ namespace lmsAPI.Controllers
             this.context.activities_owned.Remove(dbactivityowned);
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).ToListAsync());
+            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
         }
     }
 }
