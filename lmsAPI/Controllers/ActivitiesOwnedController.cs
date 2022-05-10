@@ -158,10 +158,11 @@ namespace lmsAPI.Controllers
                 });
             
             dbactivityowned.status = request.status;
-           
+            var activity_owned = await this.context.activities_owned.Where(g => g.id == request.id).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
+
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
+            return Ok(activity_owned);
         }
 
         [HttpPut("duedate")]
@@ -186,10 +187,10 @@ namespace lmsAPI.Controllers
 
             dbactivityowned.start_date = request.start_date;
             dbactivityowned.end_date = request.end_date;
-
+            var activity_owned = await this.context.activities_owned.Where(g => g.id == request.id).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
+            return Ok(activity_owned);
         }
 
         [HttpPut("mentor-email")]
@@ -213,10 +214,10 @@ namespace lmsAPI.Controllers
                 });
 
             dbactivityowned.mentor_email = request.mentor_email;
-
+            var activity_owned = await this.context.activities_owned.Where(g => g.id == request.id).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
+            return Ok(activity_owned);
         }
 
         [HttpPut("activity-note")]
@@ -240,10 +241,10 @@ namespace lmsAPI.Controllers
                 });
 
             dbactivityowned.activity_note = request.activity_note;
-
+            var activity_owned = await this.context.activities_owned.Where(g => g.id == request.id).Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync();
             await this.context.SaveChangesAsync();
 
-            return Ok(await this.context.activities_owned.Include(e => e.user_).Include(f => f.activities_).Include(c => c.category_).ToListAsync());
+            return Ok(activity_owned);
         }
 
         [HttpDelete("{id}")]
