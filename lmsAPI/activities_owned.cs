@@ -16,7 +16,7 @@ namespace lmsAPI
         public string start_date { get; set; }
         public string end_date { get; set; }
         public string status { get; set; } = string.Empty;
-        public bool validated { get; set; }
+        public bool late { get; set; }
         public string mentor_email { get; set; } = string.Empty;
         public string activity_note { get; set; } = string.Empty;
 

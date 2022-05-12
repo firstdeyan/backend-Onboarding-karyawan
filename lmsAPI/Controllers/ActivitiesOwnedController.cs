@@ -84,7 +84,7 @@ namespace lmsAPI.Controllers
             activities_owned.start_date = request.start_date;
             activities_owned.end_date = request.end_date;
             activities_owned.status = request.status;
-            activities_owned.validated = request.validated;
+            activities_owned.late = request.late;
             activities_owned.mentor_email = request.mentor_email;
             activities_owned.activity_note = request.activity_note;
             this.context.activities_owned.Add(activities_owned);
@@ -128,7 +128,7 @@ namespace lmsAPI.Controllers
             dbactivityowned.start_date = request.start_date;
             dbactivityowned.end_date = request.end_date;
             dbactivityowned.status = request.status;
-            dbactivityowned.validated = request.validated;
+            dbactivityowned.late = request.late;
             dbactivityowned.mentor_email = request.mentor_email;
             dbactivityowned.activity_note = request.activity_note;
 

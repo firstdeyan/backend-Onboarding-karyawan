@@ -18,7 +18,7 @@ namespace lmsAPI.Migrations
                     start_date = table.Column<string>(type: "text", nullable: false),
                     end_date = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
-                    validated = table.Column<bool>(type: "boolean", nullable: false),
+                    late = table.Column<bool>(type: "boolean", nullable: false),
                     mentor_email = table.Column<string>(type: "text", nullable: false),
                     activity_note = table.Column<string>(type: "text", nullable: false),
                     user_email = table.Column<string>(type: "text", nullable: false),
