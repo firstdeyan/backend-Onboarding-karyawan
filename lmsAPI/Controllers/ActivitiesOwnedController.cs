@@ -124,7 +124,7 @@ namespace lmsAPI.Controllers
                 }); */
             dbactivityowned.user_ = dbuser;
             dbactivityowned.activities_ = activity;
-            activities_owned.category_ = category;
+            dbactivityowned.category_ = category;
             dbactivityowned.start_date = request.start_date;
             dbactivityowned.end_date = request.end_date;
             dbactivityowned.status = request.status;
