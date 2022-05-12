@@ -61,6 +61,7 @@ namespace lmsAPI.Controllers
             admin.gender = request.gender;
             admin.birthdate = request.birthdate;
             admin.phone_number = request.phone_number;
+            admin.active = true;
 
             this.context.admin.Add(admin);
             await this.context.SaveChangesAsync();
@@ -102,6 +103,9 @@ namespace lmsAPI.Controllers
             user.birthdate = request.birthdate;
             user.phone_number = request.phone_number;
             user.progress = 0;
+            user.finishedActivities = 0;
+            user.assignedActivities = 0;
+            user.active = true;
 
             this.context.user.Add(user);
             await this.context.SaveChangesAsync();
@@ -129,7 +133,7 @@ namespace lmsAPI.Controllers
                 {
                     Status = "error",
                     ErrorCode = "400",
-                    ErrorMessage = "Email salah"
+                    ErrorMessage = "Email tidak terdaftar"
                 });
             }
 
@@ -172,7 +176,7 @@ namespace lmsAPI.Controllers
             {
                 return BadRequest(new Response { Status = "error",
                                                  ErrorCode = "400",
-                                                 ErrorMessage = "Email salah" } );
+                                                 ErrorMessage = "Email tidak terdaftar" } );
             }
 
             if (!VerifyPasswordHash(request.password, dbadmin.passwordHash, dbadmin.passwordSalt))
@@ -216,7 +220,18 @@ namespace lmsAPI.Controllers
                 {
                     Status = "error",
                     ErrorCode = "400",
-                    ErrorMessage = "Email salah"
+                    ErrorMessage = "Email tidak terdaftar"
+                });
+            }
+            var active = true;
+            var dbadminActive = await this.context.admin.Where(a => a.active == active).FirstOrDefaultAsync(e => e.email == request.email); ;
+            if (dbadminActive == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email tidak active"
                 });
             }
 
@@ -273,17 +288,26 @@ namespace lmsAPI.Controllers
             }
             var roleid = 4;
             var dbuser = await this.context.user.Include(r => r.role_).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
-
             if (dbuser == null)
             {
                 return BadRequest(new Response
                 {
                     Status = "error",
                     ErrorCode = "400",
-                    ErrorMessage = "Email salah"
+                    ErrorMessage = "Email tidak terdaftar"
                 });
             }
-
+            var active = true;
+            var dbuseractive = await this.context.user.Include(r => r.role_).Where(a => a.active == active).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
+            if (dbuseractive == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email tidak active"
+                });
+            }
             if (!VerifyPasswordHash(request.password, dbuser.passwordHash, dbuser.passwordSalt))
             {
                 return BadRequest(new Response
@@ -324,10 +348,20 @@ namespace lmsAPI.Controllers
                 {
                     Status = "error",
                     ErrorCode = "400",
-                    ErrorMessage = "Email salah"
+                    ErrorMessage = "Email tidak terdaftar"
                 });
             }
-
+            var active = true;
+            var dbuseractive = await this.context.user.Include(r => r.role_).Where(a => a.active == active).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
+            if (dbuseractive == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email tidak active"
+                });
+            }
             if (!VerifyPasswordHash(request.password, dbuser.passwordHash, dbuser.passwordSalt))
             {
                 return BadRequest(new Response

@@ -18,6 +18,7 @@ namespace lmsAPI
         public string gender { get; set; } = string.Empty;
         public string birthdate { get; set; } = string.Empty;
         public string phone_number { get; set; } = string.Empty;
+        public bool active { get; set; }
 
         [JsonIgnore]
         public int role_id { get; set; }

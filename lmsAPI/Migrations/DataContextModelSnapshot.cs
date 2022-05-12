@@ -70,6 +70,9 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("late")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("mentor_email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -85,9 +88,6 @@ namespace lmsAPI.Migrations
                     b.Property<string>("user_email")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("validated")
-                        .HasColumnType("boolean");
 
                     b.HasKey("id");
 
@@ -141,6 +141,9 @@ namespace lmsAPI.Migrations
                 {
                     b.Property<string>("email")
                         .HasColumnType("text");
+
+                    b.Property<bool>("active")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("admin_name")
                         .IsRequired()
@@ -254,9 +257,18 @@ namespace lmsAPI.Migrations
                     b.Property<string>("email")
                         .HasColumnType("text");
 
+                    b.Property<bool>("active")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("assignedActivities")
+                        .HasColumnType("integer");
+
                     b.Property<string>("birthdate")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("finishedActivities")
+                        .HasColumnType("integer");
 
                     b.Property<string>("gender")
                         .IsRequired()

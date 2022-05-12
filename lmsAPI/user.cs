@@ -18,6 +18,9 @@ namespace lmsAPI
         public string birthdate { get; set; } = string.Empty;
         public string phone_number { get; set; } = string.Empty;
         public double progress { get; set; }
+        public int finishedActivities { get; set; }
+        public int assignedActivities { get; set; }
+        public bool active { get; set; }
 
         [JsonIgnore]
         public int role_id { get; set; }

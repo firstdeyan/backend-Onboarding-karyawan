@@ -65,6 +65,28 @@ namespace lmsAPI.Controllers
             return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
+        [HttpPut("active")]
+        public async Task<ActionResult<List<admin>>> UpdateActive(edit_active request)
+        {
+            var dbadmin = await this.context.admin.FindAsync(request.email);
+
+            if (dbadmin == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
+            }
+
+            dbadmin.active = request.active;
+            var admin = await this.context.admin.Where(e => e.email == request.email).Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+            await this.context.SaveChangesAsync();
+
+            return Ok(admin);
+        }
+
         [HttpPut("edit-password")]
         public async Task<ActionResult<List<admin>>> UpdateAdmin(editPassword request)
         {
