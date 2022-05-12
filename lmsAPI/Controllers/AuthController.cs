@@ -229,16 +229,15 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Password salah"
                 });
             }
-            string [] super = new string[7];
-            super[0] = "Super@example.com";
-            super[1] = "superadmin@example.com";
             string expiresIn = "31536000";
             string token = CreateTokenAdmin(dbadmin);
             string role = "admin";
             string expiresIns = "31536000";
             string tokens = CreateTokenSuperAdmin(dbadmin);
             string roles = "superadmin";
-            if (request.email.Equals(super))
+            var roleid = 2;
+            var dbadminrole = await this.context.admin.Include(r => r.role_).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
+            if (dbadminrole == null)
             {
                 return Ok(new
                 {
@@ -272,7 +271,8 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Format email salah"
                 });
             }
-            var dbuser = await this.context.user.FindAsync(request.email);
+            var roleid = 4;
+            var dbuser = await this.context.user.Include(r => r.role_).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
 
             if (dbuser == null)
             {
@@ -315,7 +315,8 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Format email salah"
                 });
             }
-            var dbuser = await this.context.user.FindAsync(request.email);
+            var roleid = 3;
+            var dbuser = await this.context.user.Include(r => r.role_).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
 
             if (dbuser == null)
             {
