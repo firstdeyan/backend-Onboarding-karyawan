@@ -79,12 +79,24 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Email salah"
                 });
             }
+            var condition = false;
+            var dbusercondition = await this.context.admin.Where(a => a.active == request.active).FirstOrDefaultAsync(e => e.email == request.email);
+            if (dbusercondition != null)
+            {
+                dbadmin.active = condition;
+                var adminf = await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+                await this.context.SaveChangesAsync();
 
-            dbadmin.active = request.active;
-            var admin = await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
-            await this.context.SaveChangesAsync();
+                return Ok(adminf);
+            }
+            else
+            {
+                dbadmin.active = request.active;
+                var admin = await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+                await this.context.SaveChangesAsync();
 
-            return Ok(admin);
+                return Ok(admin);
+            }
         }
 
         [HttpPut("edit-password")]

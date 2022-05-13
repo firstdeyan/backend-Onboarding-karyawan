@@ -182,12 +182,23 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Email salah"
                 });
             }
+            var condition = false;
+            var dbusercondition = await this.context.user.Where(a => a.active == request.active).FirstOrDefaultAsync(e => e.email == request.email);
+            if (dbusercondition != null)
+            {
+                dbuser.active = condition;
+                await this.context.SaveChangesAsync();
+                var userf = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+                return Ok(userf);
+            }
+            else
+            {
+                dbuser.active = request.active;
+                var user = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+                await this.context.SaveChangesAsync();
 
-            dbuser.active = request.active;
-            var user = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
-            await this.context.SaveChangesAsync();
-
-            return Ok(user);
+                return Ok(user);
+            }
         }
 
         [HttpDelete("{email}")]
