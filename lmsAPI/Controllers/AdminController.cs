@@ -81,7 +81,7 @@ namespace lmsAPI.Controllers
             }
 
             dbadmin.active = request.active;
-            var admin = await this.context.admin.Where(e => e.email == request.email).Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+            var admin = await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
             await this.context.SaveChangesAsync();
 
             return Ok(admin);

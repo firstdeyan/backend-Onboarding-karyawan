@@ -184,7 +184,7 @@ namespace lmsAPI.Controllers
             }
 
             dbuser.active = request.active;
-            var user = await this.context.user.Where(e => e.email == request.email).Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
+            var user = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
             await this.context.SaveChangesAsync();
 
             return Ok(user);
