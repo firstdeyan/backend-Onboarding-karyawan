@@ -183,7 +183,7 @@ namespace lmsAPI.Controllers
                 });
             }
             var condition = false;
-            var dbusercondition = await this.context.user.Where(a => a.active == request.active).FirstOrDefaultAsync(e => e.email == request.email);
+            var dbusercondition = await this.context.user.Where(a => a.active == true).FirstOrDefaultAsync(e => e.email == request.email);
             if (dbusercondition != null)
             {
                 dbuser.active = condition;
@@ -193,7 +193,7 @@ namespace lmsAPI.Controllers
             }
             else
             {
-                dbuser.active = request.active;
+                dbuser.active = true;
                 var user = await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync();
                 await this.context.SaveChangesAsync();
 
