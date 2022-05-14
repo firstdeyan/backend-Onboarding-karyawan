@@ -1,8 +1,10 @@
-﻿namespace lmsAPI
+﻿using System.ComponentModel.DataAnnotations;
+namespace lmsAPI
 {
     public class edit_assignedActivities
     {
         public string email { get; set; } = string.Empty;
+        
         public int assignedActivities { get; set; }
     }
 }
