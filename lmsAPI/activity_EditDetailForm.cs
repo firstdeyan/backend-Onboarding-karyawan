@@ -14,7 +14,7 @@ namespace lmsAPI
         [MaxLength(200)]
         public string detail_desc { get; set; } = string.Empty;
         [MaxLength(200)]
-        public IFormFile[] files { get; set; }
+        public IFormFile[]? files { get; set; }
 
         [MaxLength(100)]
         public string detail_type { get; set; } = string.Empty;

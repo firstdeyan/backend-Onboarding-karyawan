@@ -10,8 +10,8 @@ namespace lmsAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "admin,superadmin,user,mentor")]
-    [EnableCors]
+    //[Authorize(Roles = "admin,superadmin,user,mentor")]
+    //[EnableCors]
     public class ShowPdf: ControllerBase
     {
         private readonly DataContext context;

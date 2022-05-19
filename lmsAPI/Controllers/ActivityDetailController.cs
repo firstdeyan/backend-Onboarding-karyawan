@@ -56,8 +56,26 @@ namespace lmsAPI.Controllers
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        string url = Filename;
-                        details.detail_link = url;
+                        if (request.detail_type == "pdf")
+                        {
+                            string url = "https://localhost:44311/api/ShowPdf/" + Filename;
+                            details.detail_link = url;
+                        }
+                        else if (request.detail_type == "image")
+                        {
+                            string url = "https://localhost:44311/api/ShowImage/" + Filename;
+                            details.detail_link = url;
+                        }
+                        else if (request.detail_type == "video")
+                        {
+                            string url = "https://localhost:44311/api/ShowVideo/" + Filename;
+                            details.detail_link = url;
+                        }
+                        else
+                        {
+                            details.detail_link = null;
+                        }
+
                     }
                 }
             }
@@ -95,8 +113,24 @@ namespace lmsAPI.Controllers
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        string url = Filename;
-                        dbdetail.detail_link = url;
+                        if(request.detail_type == "pdf")
+                        {
+                            string url = "https://localhost:44311/api/ShowPdf/" + Filename;
+                            dbdetail.detail_link = url;
+                        }else if (request.detail_type == "image")
+                        {
+                            string url = "https://localhost:44311/api/ShowImage/" + Filename;
+                            dbdetail.detail_link = url;
+                        }
+                        else if (request.detail_type == "video")
+                        {
+                            string url = "https://localhost:44311/api/ShowVideo/" + Filename;
+                            dbdetail.detail_link = url;
+                        }
+                        else
+                        {
+                            dbdetail.detail_link = null;
+                        }
                     }
                 }
             }
