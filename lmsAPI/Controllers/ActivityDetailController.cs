@@ -58,17 +58,17 @@ namespace lmsAPI.Controllers
                         file.CopyToAsync(stream);
                         if (request.detail_type == "pdf")
                         {
-                            string url = "https://localhost:44311/api/ShowPdf/" + Filename;
+                            string url = "api/ShowPdf/" + Filename;
                             details.detail_link = url;
                         }
                         else if (request.detail_type == "image")
                         {
-                            string url = "https://localhost:44311/api/ShowImage/" + Filename;
+                            string url = "api/ShowImage/" + Filename;
                             details.detail_link = url;
                         }
                         else if (request.detail_type == "video")
                         {
-                            string url = "https://localhost:44311/api/ShowVideo/" + Filename;
+                            string url = "api/ShowVideo/" + Filename;
                             details.detail_link = url;
                         }
                         else
@@ -115,16 +115,16 @@ namespace lmsAPI.Controllers
                         file.CopyToAsync(stream);
                         if(request.detail_type == "pdf")
                         {
-                            string url = "https://localhost:44311/api/ShowPdf/" + Filename;
+                            string url = "api/ShowPdf/" + Filename;
                             dbdetail.detail_link = url;
                         }else if (request.detail_type == "image")
                         {
-                            string url = "https://localhost:44311/api/ShowImage/" + Filename;
+                            string url = "api/ShowImage/" + Filename;
                             dbdetail.detail_link = url;
                         }
                         else if (request.detail_type == "video")
                         {
-                            string url = "https://localhost:44311/api/ShowVideo/" + Filename;
+                            string url = "api/ShowVideo/" + Filename;
                             dbdetail.detail_link = url;
                         }
                         else
