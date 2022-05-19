@@ -42,15 +42,29 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<activity_details>>> AddActivityDetail(activity_detailForm request)
+        public async Task<ActionResult<List<activity_details>>> Upload([FromForm] activity_detailForm request)
         {
-            var dbdetail = await this.context.activity_details.FindAsync(request.id);
+           
             var activity = await this.context.activities.FindAsync(request.activity_id);
-            details.id = request.id;
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        string url = Filename;
+                        details.detail_link = url;
+                    }
+                }
+            }
+          
             details.activity_ = activity;
             details.detail_name = request.detail_name;
             details.detail_desc = request.detail_desc;
-            details.detail_link = request.detail_link;
             details.detail_type = request.detail_type;
             details.detail_urutan = request.detail_urutan;  
             this.context.activity_details.Add(details);
@@ -60,7 +74,7 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<activity_details>>> UpdateActivityDetail(activity_detailForm request)
+        public async Task<ActionResult<List<activity_details>>> UpdateActivityDetail([FromForm] activity_EditDetailForm request)
         {
             var dbdetail = await this.context.activity_details.FindAsync(request.id);
             var activity = await this.context.activities.FindAsync(request.activity_id);
@@ -71,10 +85,24 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Activity Detail tidak ditemukan"
                 });
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        string url = Filename;
+                        dbdetail.detail_link = url;
+                    }
+                }
+            }
             dbdetail.activity_ = activity;
             dbdetail.detail_name = request.detail_name;
             dbdetail.detail_desc = request.detail_desc;
-            dbdetail.detail_link = request.detail_link;
             dbdetail.detail_type = request.detail_type;
             dbdetail.detail_urutan = request.detail_urutan;
 
@@ -82,7 +110,7 @@ namespace lmsAPI.Controllers
 
             return Ok(await this.context.activity_details.Include(e => e.activity_).ToListAsync());
         }
-
+       
         [HttpDelete("{id}")]
         public async Task<ActionResult<activity_details>> Delete(int id)
         {

@@ -5,6 +5,7 @@ global using Microsoft.EntityFrameworkCore;*/
 global using lmsAPI.Data;
 global using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
@@ -33,8 +34,8 @@ builder.Services.AddSwaggerGen(options => {
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
+    //options.OperationFilter<FileUploadOperationFilter>();
+    options.OperationFilter<SecurityRequirementsOperationFilter>();  
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>{
@@ -46,6 +47,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
             ValidateAudience = false
         };
+   
     });
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 /*builder.Services.AddDbContext<JobContext>(options =>
@@ -58,9 +60,20 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+   
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    });
 }
+app.UseFileServer(new FileServerOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(Directory.GetCurrentDirectory(), "File")),
+    RequestPath = "/File",
+    EnableDefaultFiles = true
+}); ;
 
 app.UseHttpsRedirection();
 app.UseRouting();
