@@ -61,7 +61,12 @@ namespace lmsAPI.Controllers
         {
             var dbactivity = await this.context.activities.FindAsync(request.id);
             var category = await this.context.categories.FindAsync(request.category_id);
-            if (request.files != null && request.files.Count() > 0)
+            if (request.files == null)
+            {
+                string url = "api/ShowImage/noimage.png";
+                activities.cover = url;
+            }
+            else if (request.files != null && request.files.Count() > 0)
             {
                 foreach (var file in request.files)
                 {
@@ -71,17 +76,8 @@ namespace lmsAPI.Controllers
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        if (request.files == null)
-                        {
-                            string url = "api/ShowImage/noimage.png";
-                            activities.cover = url;
-                        }
-                        else
-                        {
-                            string url = "api/ShowImage/" + Filename;
-                            activities.cover = url;
-                        }
-
+                        string url = "api/ShowImage/" + Filename;
+                        activities.cover = url;
                     }
                 }
             }
@@ -108,7 +104,12 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Activity tidak ditemukan"
                 });
-            if (request.files != null && request.files.Count() > 0)
+            if (request.files == null)
+            {
+                string url = "api/ShowImage/noimage.png";
+                dbactivity.cover = url;
+            }
+            else if (request.files != null && request.files.Count() > 0)
             {
                 foreach (var file in request.files)
                 {
@@ -118,17 +119,8 @@ namespace lmsAPI.Controllers
                         var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
-                        if (request.files == null)
-                        {
-                            string url = "api/ShowImage/noimage.png";
-                            dbactivity.cover = url;
-                        }
-                        else
-                        {
-                            string url = "api/ShowImage/" + Filename;
-                            dbactivity.cover = url;
-                        }
-
+                        string url = "api/ShowImage/" + Filename;
+                        dbactivity.cover = url;
                     }
                 }
             }
