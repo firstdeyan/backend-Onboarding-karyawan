@@ -201,6 +201,45 @@ namespace lmsAPI.Controllers
             }
         }
 
+        [HttpPut("photo")]
+        public async Task<ActionResult<List<user>>> UpdatePhotoUser([FromForm] editPhoto request)
+        {
+            var dbuser = await this.context.user.FindAsync(request.email);
+
+            if (dbuser == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
+            }
+            if (request.files == null)
+            {
+                string url = "api/ShowImage/userimage.png";
+                dbuser.photo = url;
+            }
+            else if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        string url = "api/ShowImage/" + Filename;
+                        dbuser.photo = url;
+                    }
+                }
+            }
+            await this.context.SaveChangesAsync();
+
+            return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).FirstOrDefaultAsync(g => g.email == request.email));
+        }
+
         [HttpDelete("{email}")]
         public async Task<ActionResult<user>> Delete(string email)
         {

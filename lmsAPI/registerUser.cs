@@ -17,6 +17,8 @@ namespace lmsAPI
         public string birthdate { get; set; } = string.Empty;
         [MaxLength(15)]
         public string phone_number { get; set; } = string.Empty;
+        [MaxLength(200)]
+        public IFormFile[]? files { get; set; }
 
     }
 }

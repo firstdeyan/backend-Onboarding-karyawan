@@ -43,7 +43,14 @@ namespace lmsAPI.Controllers
             if (System.IO.File.Exists(path))
             {
                 byte[] b = System.IO.File.ReadAllBytes(path);
-                return File(b, "image/png");
+                if (filename.Contains(".png")){
+                    return File(b, "image/png");
+                }
+                else
+                {
+                    return File(b, "image/jpeg");
+                }
+                
             }
             return null;
         }

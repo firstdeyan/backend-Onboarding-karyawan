@@ -18,9 +18,6 @@ namespace lmsAPI.Controllers
         private readonly IConfiguration configuration;
         public static admin admin = new admin();
         public static user user = new user();
-        
-
-
 
         public AuthController(DataContext context, IConfiguration configuration)
         {
@@ -30,7 +27,7 @@ namespace lmsAPI.Controllers
 
         [HttpPost("register-admin"), Authorize(Roles = "superadmin")]
 
-        public async Task<ActionResult<List<admin>>> AddAdmin(registerAdmin request)
+        public async Task<ActionResult<List<admin>>> AddAdmin([FromForm]registerAdmin request)
         {
             if (!request.email.Contains("@"))
             {
@@ -52,6 +49,30 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Email telah digunakan"
                 });
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        if (request.files == null)
+                        {
+                            string url = "api/ShowImage/userimage.png";
+                            admin.photo = url;
+                        }
+                        else
+                        {
+                            string url = "api/ShowImage/" + Filename;
+                            admin.photo = url;
+                        }
+
+                    }
+                }
+            }
             admin.email = request.email;
             admin.admin_name = request.admin_name;
             admin.passwordHash = passwordHash;
@@ -71,7 +92,7 @@ namespace lmsAPI.Controllers
 
 
         [HttpPost("register-user"), Authorize(Roles = "admin,superadmin")]
-        public async Task<ActionResult<List<user>>> AddUser(registerUser request)
+        public async Task<ActionResult<List<user>>> AddUser([FromForm] registerUser request)
         {
             if (!request.email.Contains("@"))
             {
@@ -93,6 +114,30 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Email telah digunakan"
                 });
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        if (request.files == null)
+                        {
+                            string url = "api/ShowImage/userimage.png";
+                            user.photo = url;
+                        }
+                        else
+                        {
+                            string url = "api/ShowImage/" + Filename;
+                            user.photo = url;
+                        }
+
+                    }
+                }
+            }
             user.email = request.email;
             user.name = request.name;
             user.passwordHash = passwordHash;

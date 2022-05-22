@@ -21,8 +21,9 @@ namespace lmsAPI
         public string birthdate { get; set; } = string.Empty;
         [MaxLength(15)]
         public string phone_number { get; set; } = string.Empty;
+        [MaxLength(200)]
+        public string photo { get; set; } = string.Empty;
         public double progress { get; set; }
-        
         public int finishedActivities { get; set; }
        
         public int assignedActivities { get; set; }

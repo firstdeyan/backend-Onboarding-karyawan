@@ -9,7 +9,6 @@ namespace lmsAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "admin,superadmin")]
-   
     [EnableCors]
     public class AdminController : ControllerBase
     {
@@ -136,6 +135,45 @@ namespace lmsAPI.Controllers
                 Code = "200",
                 Message = "Password berhasil diubah"
             });
+        }
+
+        [HttpPut("photo")]
+        public async Task<ActionResult<List<admin>>> UpdatePhotoAdmin([FromForm] editPhoto request)
+        {
+            var dbadmin = await this.context.admin.FindAsync(request.email);
+
+            if (dbadmin == null)
+            {
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Email salah"
+                });
+            }
+            if (request.files == null)
+            {
+                string url = "api/ShowImage/userimage.png";
+                dbadmin.photo = url;
+            }
+            else if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        string url = "api/ShowImage/" + Filename;
+                        dbadmin.photo = url;
+                    }
+                }
+            }
+            await this.context.SaveChangesAsync();
+            
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).FirstOrDefaultAsync(g => g.email == request.email));
         }
 
         [HttpDelete("{email}")]

@@ -22,6 +22,8 @@ namespace lmsAPI
         public string birthdate { get; set; } = string.Empty;
         [MaxLength(15)]
         public string phone_number { get; set; } = string.Empty;
+        [MaxLength(200)]
+        public string photo { get; set; } = string.Empty;
         public bool active { get; set; }
 
         [JsonIgnore]
