@@ -43,6 +43,16 @@ namespace lmsAPI.Migrations
                     b.Property<int>("category_id")
                         .HasColumnType("integer");
 
+                    b.Property<string>("cover")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("type")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
                     b.HasKey("id");
 
                     b.HasIndex("category_id");
@@ -118,8 +128,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("detail_desc")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<string>("detail_link")
                         .IsRequired()
@@ -182,6 +192,11 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("character varying(15)");
+
+                    b.Property<string>("photo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("role_id")
                         .HasColumnType("integer");
@@ -314,6 +329,11 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(15)
                         .HasColumnType("character varying(15)");
+
+                    b.Property<string>("photo")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<double>("progress")
                         .HasColumnType("double precision");
