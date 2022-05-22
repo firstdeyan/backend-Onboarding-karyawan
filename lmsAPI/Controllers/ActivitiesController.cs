@@ -61,7 +61,11 @@ namespace lmsAPI.Controllers
         {
             var dbactivity = await this.context.activities.FindAsync(request.id);
             var category = await this.context.categories.FindAsync(request.category_id);
-          
+            if (request.files == null)
+            {
+                string url = "api/ShowImage/noimage.png";
+                activities.cover = url;
+            }
             else if (request.files != null && request.files.Count() > 0)
             {
                 foreach (var file in request.files)
