@@ -57,14 +57,39 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<activities>>> AddActivity(activitiesForm request)
+        public async Task<ActionResult<List<activities>>> AddActivity([FromForm] activitiesForm request)
         {
             var dbactivity = await this.context.activities.FindAsync(request.id);
             var category = await this.context.categories.FindAsync(request.category_id);
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        if (request.files == null)
+                        {
+                            string url = "api/ShowImage/noimage.png";
+                            activities.cover = url;
+                        }
+                        else
+                        {
+                            string url = "api/ShowImage/" + Filename;
+                            activities.cover = url;
+                        }
+
+                    }
+                }
+            }
             activities.id = request.id;
             activities.activity_name = request.activity_name;
             activities.activity_description = request.activity_description;
             activities.category_ = category;
+            activities.type = request.type;
             this.context.activities.Add(activities);
             await this.context.SaveChangesAsync();
 
@@ -72,7 +97,7 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<List<activities>>> UpdateActivity(activitiesForm request)
+        public async Task<ActionResult<List<activities>>> UpdateActivity([FromForm] activitiesForm request)
         {
             var dbactivity = await this.context.activities.FindAsync(request.id);
             var category = await this.context.categories.FindAsync(request.category_id);
@@ -83,10 +108,34 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Activity tidak ditemukan"
                 });
+            if (request.files != null && request.files.Count() > 0)
+            {
+                foreach (var file in request.files)
+                {
+                    if (file != null)
+                    {
+                        string Filename = DateTime.Now.ToString("yyyyMMddHHmmss") + file.FileName;
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "../lmsAPI/File", Filename);
+                        var stream = new FileStream(path, FileMode.Create);
+                        file.CopyToAsync(stream);
+                        if (request.files == null)
+                        {
+                            string url = "api/ShowImage/noimage.png";
+                            dbactivity.cover = url;
+                        }
+                        else
+                        {
+                            string url = "api/ShowImage/" + Filename;
+                            dbactivity.cover = url;
+                        }
+
+                    }
+                }
+            }
             dbactivity.activity_name = request.activity_name;
             dbactivity.activity_description = request.activity_description;
             dbactivity.category_ = category;
-
+            dbactivity.type = request.type;
             await this.context.SaveChangesAsync();
 
             return Ok(await this.context.activities.Include(e => e.category_).ToListAsync());

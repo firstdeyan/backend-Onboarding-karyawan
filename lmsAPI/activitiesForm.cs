@@ -13,6 +13,10 @@ namespace lmsAPI
         public string activity_name { get; set; } = string.Empty;
         [MaxLength(200)]
         public string activity_description { get; set; } = string.Empty;
-        public int category_id { get; set; }
+        public int? category_id { get; set; }
+        [MaxLength(100)]
+        public string type { get; set; } = string.Empty;
+        [MaxLength(200)]
+        public IFormFile[]? files { get; set; }
     }
 }

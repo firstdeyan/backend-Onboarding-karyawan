@@ -12,7 +12,7 @@ namespace lmsAPI
         public activities activity_ { get; set; }
         [MaxLength(100)]
         public string detail_name { get; set; } = string.Empty;
-        [MaxLength(200)]
+        [MaxLength(500)]
         public string detail_desc { get; set; } = string.Empty;
         [MaxLength(200)]
         public string detail_link { get; set; } = string.Empty;
