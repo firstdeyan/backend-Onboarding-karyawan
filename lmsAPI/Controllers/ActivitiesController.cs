@@ -89,8 +89,14 @@ namespace lmsAPI.Controllers
             activities.type = request.type;
             this.context.activities.Add(activities);
             await this.context.SaveChangesAsync();
-
-            return Ok(await this.context.activities.Include(e => e.category_).ToListAsync());
+            if (request.type == "home")
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "home").Include(e => e.category_).ToListAsync());
+            }
+            else
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
+            }
         }
 
         [HttpPut]
@@ -121,7 +127,7 @@ namespace lmsAPI.Controllers
                         var stream = new FileStream(path, FileMode.Create);
                         file.CopyToAsync(stream);
                         string url = "api/ShowImage/" + Filename;
-                        dbactivity.cover = url;
+                            dbactivity.cover = url;
                         
                     }
                 }
@@ -131,12 +137,19 @@ namespace lmsAPI.Controllers
             dbactivity.category_ = category;
             dbactivity.type = request.type;
             await this.context.SaveChangesAsync();
-
-            return Ok(await this.context.activities.Include(e => e.category_).ToListAsync());
+            if (request.type == "home")
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "home").Include(e => e.category_).ToListAsync());
+            }
+            else
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
+            }
+            
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<activities>> Delete(int id)
+        public async Task<ActionResult<List<activities>>> Delete(int id)
         {
             var dbactivity = await this.context.activities.FindAsync(id);
             if (dbactivity == null)
@@ -149,8 +162,16 @@ namespace lmsAPI.Controllers
 
             this.context.activities.Remove(dbactivity);
             await this.context.SaveChangesAsync();
+            if (activities.type == "activity" && activities.id == id)
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
 
-            return Ok(await this.context.activities.Include(e => e.category_).ToListAsync());
+            }
+            else
+            {
+                return Ok(await this.context.activities.Where(c => c.type == "home").Include(e => e.category_).ToListAsync());
+            }
+
         }
     }
 }
