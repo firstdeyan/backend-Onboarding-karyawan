@@ -45,7 +45,12 @@ namespace lmsAPI.Controllers
                 byte[] b = System.IO.File.ReadAllBytes(path);
                 return File(b, "application/pdf");
             }
-            return null;
+            return BadRequest(new Response
+            {
+                Status = "error",
+                ErrorCode = "400",
+                ErrorMessage = "File tidak tersedia"
+            });
         }
 
         /*[HttpGet("{filename}")]

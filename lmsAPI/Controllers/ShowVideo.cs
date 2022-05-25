@@ -46,7 +46,12 @@ namespace lmsAPI.Controllers
                 var video = System.IO.File.OpenRead(path);
                 return File(video, "video/mp4");
             }
-            return null;
+            return BadRequest(new Response
+            {
+                Status = "error",
+                ErrorCode = "400",
+                ErrorMessage = "File tidak tersedia"
+            });
         }
 
         /*[HttpGet]

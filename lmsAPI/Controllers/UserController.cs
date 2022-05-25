@@ -13,6 +13,7 @@ namespace lmsAPI.Controllers
     public class UserController : ControllerBase
     {
         private readonly DataContext context;
+        public static user user = new user();
 
         public UserController(DataContext context)
         {

@@ -52,7 +52,12 @@ namespace lmsAPI.Controllers
                 }
                 
             }
-            return null;
+            return BadRequest(new Response
+            {
+                Status = "error",
+                ErrorCode = "400",
+                ErrorMessage = "File tidak tersedia"
+            });
         }
 
         /*[HttpGet("{filename}")]

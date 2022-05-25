@@ -13,6 +13,8 @@ namespace lmsAPI.Controllers
     {
         private readonly DataContext context;
         public static activities activities = new activities();
+        public static admin admin = new admin();
+        public static user user = new user();
 
         public ActivitiesController(DataContext context)
         {
@@ -78,7 +80,6 @@ namespace lmsAPI.Controllers
                         file.CopyToAsync(stream);
                         string url = "api/ShowImage/" + Filename;
                         activities.cover = url;
-                        
                     }
                 }
             }
@@ -151,7 +152,7 @@ namespace lmsAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<activities>>> Delete(int id)
         {
-            var dbactivity = await this.context.activities.FindAsync(id);
+            var dbactivity = await this.context.activities.Where(c => c.type == "activity").Include(f => f.category_).FirstOrDefaultAsync(g => g.id == id);
             if (dbactivity == null)
                 return BadRequest(new Response
                 {
@@ -162,16 +163,8 @@ namespace lmsAPI.Controllers
 
             this.context.activities.Remove(dbactivity);
             await this.context.SaveChangesAsync();
-            if (activities.type == "activity" && activities.id == id)
-            {
-                return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
-
-            }
-            else
-            {
-                return Ok(await this.context.activities.Where(c => c.type == "home").Include(e => e.category_).ToListAsync());
-            }
-
+            return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
         }
+
     }
 }
