@@ -40,11 +40,16 @@ namespace lmsAPI.Controllers
 
             return Ok(detail);
         }
+        
 
         [HttpPost]
-        public async Task<ActionResult<List<activity_details>>> Upload([FromForm] activity_detailForm request)
+        public async Task<ActionResult<List<activity_details>>> AddDetails([FromForm] activity_detailForm request)
         {
-           
+            int add = 1;
+            int idMax = context.activity_details.Max(i => i.id);
+            int newid = idMax + 1;
+            details.id = newid;
+            
             var activity = await this.context.activities.FindAsync(request.activity_id);
             if (request.files != null && request.files.Count() > 0)
             {
@@ -79,16 +84,15 @@ namespace lmsAPI.Controllers
                     }
                 }
             }
-          
             details.activity_ = activity;
             details.detail_name = request.detail_name;
             details.detail_desc = request.detail_desc;
             details.detail_type = request.detail_type;
-            details.detail_urutan = request.detail_urutan;  
+            details.detail_urutan = request.detail_urutan;
             this.context.activity_details.Add(details);
             await this.context.SaveChangesAsync();
-
-            return Ok(await this.context.activity_details.Include(e => e.activity_).ToListAsync());
+            return Ok(await this.context.activity_details.Where(a => a.activity_ == activity).Include(e => e.activity_).ToListAsync());
+           
         }
 
         [HttpPut]
@@ -162,5 +166,6 @@ namespace lmsAPI.Controllers
 
             return Ok(await this.context.activity_details.Include(e => e.activity_).ToListAsync());
         }
+
     }
 }
