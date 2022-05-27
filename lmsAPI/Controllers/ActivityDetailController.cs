@@ -84,6 +84,10 @@ namespace lmsAPI.Controllers
                     }
                 }
             }
+            else
+            {
+                details.detail_link = null;
+            }
             details.activity_ = activity;
             details.detail_name = request.detail_name;
             details.detail_desc = request.detail_desc;
@@ -137,6 +141,10 @@ namespace lmsAPI.Controllers
                         }
                     }
                 }
+            }
+            else
+            {
+                details.detail_link = null;
             }
             dbdetail.activity_ = activity;
             dbdetail.detail_name = request.detail_name;
