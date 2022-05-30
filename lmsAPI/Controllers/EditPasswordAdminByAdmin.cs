@@ -40,12 +40,7 @@ namespace lmsAPI.Controllers
 
             await this.context.SaveChangesAsync();
 
-            return Ok(new editPasswordSucces
-            {
-                Status = "Success",
-                Code = "200",
-                Message = "Password berhasil diubah"
-            });
+            return Ok(await this.context.admin.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
         private void CreatePasswordHash(string new_password, out byte[] passwordHash, out byte[] passwordSalt)
         {
