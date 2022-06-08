@@ -29,7 +29,6 @@ namespace lmsAPI
         public string user_email { get; set; } = string.Empty;
         [JsonIgnore]
         public int activities_id { get; set; }
-        [JsonIgnore]
         public int category_id { get; set; }
      
     }

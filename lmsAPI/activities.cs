@@ -19,7 +19,7 @@ namespace lmsAPI
         [MaxLength(100)]
         public string type { get; set; } = string.Empty;
 
-        [JsonIgnore]
+       
         public int category_id { get; set; }
     }
 }
