@@ -89,7 +89,15 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Job title tidak ditemukan"
                 });
-
+            var user = await this.context.user.Include(c => c.jobtitle_).Where(i => i.jobtitle_id == id).FirstOrDefaultAsync();
+            var admin = await this.context.admin.Include(c => c.jobtitle_).Where(i => i.jobtitle_id == id).FirstOrDefaultAsync();
+            if (user != null || admin != null)
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Jobtitle tidak dapat dihapus karena dimiliki User atau Admin"
+                });
             this.context.job_titles.Remove(dbjob);
             await this.context.SaveChangesAsync();
 

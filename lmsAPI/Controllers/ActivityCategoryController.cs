@@ -88,6 +88,14 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Activity Category tidak ditemukan"
                 });
+            var activity = await this.context.activities.Include(c => c.category_).Where(i => i.category_id == id).FirstOrDefaultAsync();
+            if (activity != null)
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Activity Category tidak dapat dihapus karena dimiliki Activity"
+                });
 
             this.context.categories.Remove(dbcategory);
             await this.context.SaveChangesAsync();

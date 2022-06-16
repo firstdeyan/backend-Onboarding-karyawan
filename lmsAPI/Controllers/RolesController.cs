@@ -102,7 +102,15 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Role tidak ditemukan"
                 });
-
+            var user = await this.context.user.Include(c => c.role_).Where(i => i.role_id == id).FirstOrDefaultAsync();
+            var admin = await this.context.admin.Include(c => c.role_).Where(i => i.role_id == id).FirstOrDefaultAsync();
+            if (user != null || admin != null)
+                return BadRequest(new Response
+                {
+                    Status = "error",
+                    ErrorCode = "400",
+                    ErrorMessage = "Role tidak dapat dihapus karena dimiliki User atau Admin"
+                });
             this.context.roles.Remove(dbrole);
             await this.context.SaveChangesAsync();
 
