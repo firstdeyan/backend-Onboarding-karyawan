@@ -191,7 +191,7 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Password salah"
                 });
             }
-            string expiresIn = "31536000";
+            string expiresIn = "10";
             string token = CreateTokenAdmin(dbadmin);
             string role = "admin";
             return Ok(new
@@ -233,7 +233,7 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Password salah"
                 });
             }
-            string expiresIn = "31536000";
+            string expiresIn = "10";
             string token = CreateTokenSuperAdmin(dbadmin);
             string role = "superadmin";
             return Ok(new
@@ -289,10 +289,10 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Password salah"
                 });
             }
-            string expiresIn = "31536000";
+            string expiresIn = "10";
             string token = CreateTokenAdmin(dbadmin);
             string role = "admin";
-            string expiresIns = "31536000";
+            string expiresIns = "10";
             string tokens = CreateTokenSuperAdmin(dbadmin);
             string roles = "superadmin";
             var roleid = 2;
@@ -363,7 +363,7 @@ namespace lmsAPI.Controllers
                 });
             }
             
-            string expiresIn = "31536000";
+            string expiresIn = "10";
             string token =  CreateTokenUser(dbuser);
             string role = "user";
             return Ok( new { token = token,
@@ -417,7 +417,7 @@ namespace lmsAPI.Controllers
                 });
             }
 
-            string expiresIn = "31536000";
+            string expiresIn = "10";
             string token = CreateTokenMentor(dbuser);
             string role = "mentor";
             return Ok(new
@@ -444,7 +444,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(365),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -467,7 +467,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(365),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -490,7 +490,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(365),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -513,7 +513,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(365),
+                expires: DateTime.Now.AddSeconds(10),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);

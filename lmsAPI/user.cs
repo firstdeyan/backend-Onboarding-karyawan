@@ -31,6 +31,8 @@ namespace lmsAPI
 
         [JsonIgnore]
         public int role_id { get; set; }
- 
+        [JsonIgnore]
+        public int jobtitle_id { get; set; }
+
     }
 }
