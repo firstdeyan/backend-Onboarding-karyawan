@@ -37,8 +37,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("activity_name")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("category_id")
                         .HasColumnType("integer");
@@ -50,8 +50,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("type")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.HasKey("id");
 
@@ -83,13 +83,10 @@ namespace lmsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("late")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("mentor_email")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
 
                     b.Property<string>("start_date")
                         .IsRequired()
@@ -97,12 +94,12 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("status")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("user_email")
                         .IsRequired()
-                        .HasColumnType("character varying(200)");
+                        .HasColumnType("character varying(45)");
 
                     b.HasKey("id");
 
@@ -132,19 +129,18 @@ namespace lmsAPI.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<string>("detail_link")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("detail_name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("detail_type")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int>("detail_urutan")
                         .HasColumnType("integer");
@@ -159,16 +155,16 @@ namespace lmsAPI.Migrations
             modelBuilder.Entity("lmsAPI.admin", b =>
                 {
                     b.Property<string>("email")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
 
                     b.Property<bool>("active")
                         .HasColumnType("boolean");
 
                     b.Property<string>("admin_name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("birthdate")
                         .IsRequired()
@@ -176,8 +172,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("gender")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<int>("jobtitle_id")
                         .HasColumnType("integer");
@@ -200,6 +196,9 @@ namespace lmsAPI.Migrations
 
                     b.Property<int>("role_id")
                         .HasColumnType("integer");
+
+                    b.Property<string>("token")
+                        .HasColumnType("text");
 
                     b.HasKey("email");
 
@@ -225,11 +224,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("category_name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
-                    b.Property<int>("duration")
-                        .HasColumnType("integer");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("id");
 
@@ -251,8 +247,8 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("jobtitle_name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.HasKey("id");
 
@@ -274,13 +270,13 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("role_name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("role_platform")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.HasKey("id");
 
@@ -290,8 +286,8 @@ namespace lmsAPI.Migrations
             modelBuilder.Entity("lmsAPI.user", b =>
                 {
                     b.Property<string>("email")
-                        .HasMaxLength(200)
-                        .HasColumnType("character varying(200)");
+                        .HasMaxLength(45)
+                        .HasColumnType("character varying(45)");
 
                     b.Property<bool>("active")
                         .HasColumnType("boolean");
@@ -308,16 +304,16 @@ namespace lmsAPI.Migrations
 
                     b.Property<string>("gender")
                         .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("character varying(25)");
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
 
                     b.Property<int>("jobtitle_id")
                         .HasColumnType("integer");
 
                     b.Property<string>("name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<byte[]>("passwordHash")
                         .HasColumnType("bytea");
@@ -340,6 +336,9 @@ namespace lmsAPI.Migrations
 
                     b.Property<int>("role_id")
                         .HasColumnType("integer");
+
+                    b.Property<string>("token")
+                        .HasColumnType("text");
 
                     b.HasKey("email");
 
