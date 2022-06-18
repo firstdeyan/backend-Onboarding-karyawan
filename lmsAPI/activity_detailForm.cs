@@ -10,14 +10,14 @@ namespace lmsAPI
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
         public int activity_id { get; set; }
-        [MaxLength(100)]
+        [MaxLength(50)]
         public string detail_name { get; set; } = string.Empty;
         [MaxLength(500)]
         public string detail_desc { get; set; } = string.Empty;
-        [MaxLength(200)]
+        [MaxLength(100)]
         public IFormFile[]? files { get; set; }
         
-        [MaxLength(100)]
+        [MaxLength(20)]
         public string detail_type { get; set; } = string.Empty;
         
         public int detail_urutan { get; set; }

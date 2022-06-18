@@ -160,8 +160,9 @@ namespace lmsAPI.Controllers
                     ErrorCode = "400",
                     ErrorMessage = "Activity tidak ditemukan"
                 });
-
+            var dbdetail = await this.context.activity_details.Where(p => p.activity_id == id).Include(e => e.activity_).ToListAsync();
             this.context.activities.Remove(dbactivity);
+            this.context.activity_details.RemoveRange(dbdetail);
             await this.context.SaveChangesAsync();
             return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
         }

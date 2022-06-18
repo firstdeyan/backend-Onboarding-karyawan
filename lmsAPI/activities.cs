@@ -9,14 +9,14 @@ namespace lmsAPI
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [MaxLength(200)]
+        [MaxLength(50)]
         public string activity_name { get; set; } = string.Empty;
         [MaxLength(200)]
         public string activity_description { get; set; } = string.Empty;
         public categories category_ { get; set; }
         [MaxLength(200)]
         public string cover { get; set; } = string.Empty;
-        [MaxLength(100)]
+        [MaxLength(10)]
         public string type { get; set; } = string.Empty;
 
        

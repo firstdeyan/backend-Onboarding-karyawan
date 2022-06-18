@@ -8,7 +8,7 @@ namespace lmsAPI
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int id { get; set; }
-        [MaxLength(100)]
+        [MaxLength(30)]
         public string jobtitle_name { get; set; } = string.Empty;
         [MaxLength(200)]
         public string jobtitle_description { get; set;} = string.Empty;

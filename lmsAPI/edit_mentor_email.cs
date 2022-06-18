@@ -5,7 +5,7 @@ namespace lmsAPI
     {
         public int id { get; set; }
         public string user_email { get; set; } = string.Empty;
-        [MaxLength(200)]
+        [MaxLength(45)]
         public string mentor_email { get; set; } = string.Empty;
     }
 }

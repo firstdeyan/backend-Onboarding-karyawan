@@ -70,7 +70,6 @@ namespace lmsAPI.Controllers
                 });
             dbcategory.category_name = request.category_name;
             dbcategory.category_description = request.category_description;
-            dbcategory.duration = request.duration;
 
             await this.context.SaveChangesAsync();
 
