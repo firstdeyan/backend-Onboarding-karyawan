@@ -246,7 +246,7 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPost("loginAdmin")]
-        public async Task<ActionResult<string>> LoginAdminCombine(login request)
+        public async Task<ActionResult<List<admin>>> LoginAdminCombine(login request)
         {
             if (!request.email.Contains("@"))
             {
@@ -289,16 +289,18 @@ namespace lmsAPI.Controllers
                     ErrorMessage = "Password salah"
                 });
             }
-            string expiresIn = "10";
+            string expiresIn = "10368000";
             string token = CreateTokenAdmin(dbadmin);
             string role = "admin";
-            string expiresIns = "10";
+            string expiresIns = "10368000";
             string tokens = CreateTokenSuperAdmin(dbadmin);
             string roles = "superadmin";
             var roleid = 2;
             var dbadminrole = await this.context.admin.Include(r => r.role_).Where(g => g.role_id == roleid).FirstOrDefaultAsync(e => e.email == request.email);
             if (dbadminrole == null)
             {
+                dbadmin.token = tokens;
+                await this.context.SaveChangesAsync();
                 return Ok(new
                 {
                     token = tokens,
@@ -309,6 +311,8 @@ namespace lmsAPI.Controllers
             }
             else
             {
+                dbadmin.token = token;
+                await this.context.SaveChangesAsync();
                 return Ok(new
                 {
                     token = token,
@@ -320,7 +324,7 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPost("login-user")]
-        public async Task<ActionResult<string>> LoginUser(login request)
+        public async Task<ActionResult<List<user>>> LoginUser(login request)
         {
             if (!request.email.Contains("@"))
             {
@@ -363,9 +367,11 @@ namespace lmsAPI.Controllers
                 });
             }
             
-            string expiresIn = "10";
+            string expiresIn = "10368000";
             string token =  CreateTokenUser(dbuser);
             string role = "user";
+            dbuser.token = token;
+            await this.context.SaveChangesAsync();
             return Ok( new { token = token,
                              expiresIn = expiresIn,
                              role = role,
@@ -373,7 +379,7 @@ namespace lmsAPI.Controllers
         }
 
         [HttpPost("login-mentor")]
-        public async Task<ActionResult<string>> LoginMentor(login request)
+        public async Task<ActionResult<List<user>>> LoginMentor(login request)
         {
             if (!request.email.Contains("@"))
             {
@@ -417,9 +423,11 @@ namespace lmsAPI.Controllers
                 });
             }
 
-            string expiresIn = "10";
+            string expiresIn = "10368000";
             string token = CreateTokenMentor(dbuser);
             string role = "mentor";
+            dbuser.token = token;
+            await this.context.SaveChangesAsync();
             return Ok(new
             {
                 token = token,
@@ -444,7 +452,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMonths(4),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -467,7 +475,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMonths(4),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -490,7 +498,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMonths(4),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
@@ -513,7 +521,7 @@ namespace lmsAPI.Controllers
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMonths(4),
                 signingCredentials: cred);
 
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
