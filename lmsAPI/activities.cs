@@ -15,6 +15,7 @@ namespace lmsAPI
         public string activity_description { get; set; } = string.Empty;
         public categories category_ { get; set; }
         [MaxLength(200)]
+        [JsonIgnore]
         public string cover { get; set; } = string.Empty;
         [MaxLength(10)]
         public string type { get; set; } = string.Empty;

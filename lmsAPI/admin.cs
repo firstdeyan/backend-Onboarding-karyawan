@@ -23,6 +23,7 @@ namespace lmsAPI
         [MaxLength(15)]
         public string phone_number { get; set; } = string.Empty;
         [MaxLength(200)]
+        [JsonIgnore]
         public string photo { get; set; } = string.Empty;
         public bool active { get; set; }
         [JsonIgnore]
