@@ -19,7 +19,8 @@ namespace lmsAPI
         
         [MaxLength(20)]
         public string detail_type { get; set; } = string.Empty;
-        
+        public string? detail_link { get; set; } = string.Empty;
+
         public int detail_urutan { get; set; }
     }
 }
