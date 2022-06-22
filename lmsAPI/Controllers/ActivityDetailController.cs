@@ -151,7 +151,14 @@ namespace lmsAPI.Controllers
             }
             else
             {
-                details.detail_link = null;
+                if (request.detail_type == "video_link")
+                {
+                    details.detail_link = request.detail_link;
+                }
+                else
+                {
+                    details.detail_link = null;
+                }
             }
             dbdetail.activity_ = activity;
             dbdetail.detail_name = request.detail_name;
