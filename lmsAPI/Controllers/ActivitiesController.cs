@@ -163,6 +163,8 @@ namespace lmsAPI.Controllers
             var dbdetail = await this.context.activity_details.Where(p => p.activity_id == id).Include(e => e.activity_).ToListAsync();
             this.context.activities.Remove(dbactivity);
             this.context.activity_details.RemoveRange(dbdetail);
+            var user_owned = await this.context.activities_owned.Where(e => e.activities_id == id).ToListAsync();
+            this.context.activities_owned.RemoveRange(user_owned);
             await this.context.SaveChangesAsync();
             return Ok(await this.context.activities.Where(c => c.type == "activity").Include(e => e.category_).ToListAsync());
         }

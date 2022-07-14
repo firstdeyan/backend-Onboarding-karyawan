@@ -254,8 +254,9 @@ namespace lmsAPI.Controllers
                 });
 
             this.context.user.Remove(dbuser);
+            var user_owned = await this.context.activities_owned.Where(e => e.user_email == email).ToListAsync();
+            this.context.activities_owned.RemoveRange(user_owned);
             await this.context.SaveChangesAsync();
-
             return Ok(await this.context.user.Include(e => e.role_).Include(f => f.jobtitle_).ToListAsync());
         }
 
